@@ -1,0 +1,21 @@
+﻿@*
+    Ticket issuer home page.
+    It displays a giant map and a search bar on the right to help ticket issuers find the station they're working at.
+    After a station has been selected, the app redirects to the main ticket issuing page for that station.
+*@
+
+@{
+    ViewData["Title"] = "Select station";
+}
+
+<h2>Select station</h2>
+
+<style>
+    canvas {
+        border-style: solid;
+    }
+</style>
+
+<canvas id="map" width="500" height="500"></canvas>
+
+<script src="~/js/MapRender.js"></script>

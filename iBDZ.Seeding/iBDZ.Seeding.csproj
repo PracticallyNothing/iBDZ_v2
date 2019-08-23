@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\iBDZ.Db\iBDZ.Db.csproj" />
+    <ProjectReference Include="..\iBDZ.Utility\iBDZ.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Routes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\TrainStationData.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,99 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    /*padding-top: 50px;
+    padding-bottom: 20px;*/
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+.MyPanel:hover {
+    cursor: pointer;
+    filter: brightness(115%);
+    background-size: 125% 250%;
+    transition: all 0.15s ease-in;
+}
+
+.MyPanel {
+    height: 200px;
+    line-height: 200px;
+    width: 100%;
+    font-size: 22pt;
+    margin-top: 15px;
+    background-color: white;
+    transition: all 0.35s ease-out;
+    background-size: 100% 200%;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(50%);
+}
+
+.MyPanelText {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    background-color: black;
+    color: white;
+    padding: 7px;
+    border-radius: 6px;
+}
+
+.MyButton:hover {
+    cursor: pointer;
+    transition: all 0.15s ease-in;
+    background-color: #eee;
+}
+
+.MyButton {
+    height: 80px;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: inline-block;
+    width: auto;
+    border: solid 1px black;
+    text-align: center;
+    border-radius: 6px;
+    transition: all 0.15s ease-out;
+    background-color: #ccc;
+}
+
+.MyCentered {
+    text-align: center;
+}
+
+.MyError {
+    color: red;
+}
+
+.MyBold {
+    font-weight: bold;
+}
