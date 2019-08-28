@@ -8,14 +8,28 @@
     ViewData["Title"] = "Select station";
 }
 
-<h2>Select station</h2>
+@model MapRenderData
 
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
     canvas {
-        border-style: solid;
+        background-color: #242424;
+        margin: 0px;
+        padding: 0px;
+        border-width: 0px;
+        width: 85%;
+        height: 100%;
     }
 </style>
 
 <canvas id="map" width="500" height="500"></canvas>
+<img style="display: none;" id="bg-map" src="~/images/bulgaria_background.svg" />
 
+<script>
+    var mapRenderData = @Html.Raw(Json.Serialize(Model));
+</script>
 <script src="~/js/MapRender.js"></script>

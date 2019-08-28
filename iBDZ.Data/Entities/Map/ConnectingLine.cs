@@ -17,13 +17,5 @@ namespace iBDZ.Data
 
 		[Range(0.5, 1)]
 		public double AverageSpeed { get; set; }
-
-		public double Length => Math.Sqrt(
-			(Node1.Longitute - Node2.Longitute) * 
-			(Node1.Longitute - Node2.Longitute) 
-			+
-			(Node1.Latitude - Node2.Latitude) * 
-			(Node1.Latitude - Node2.Latitude)
-		);
 	}
 }

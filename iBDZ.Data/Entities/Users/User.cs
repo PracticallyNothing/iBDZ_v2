@@ -1,4 +1,5 @@
 ﻿using iBDZ.Data.DataValidation;
+using iBDZ.Data.Statistics;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 

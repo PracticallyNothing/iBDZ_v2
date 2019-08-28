@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iBDZ.Db;
 
 namespace iBDZ.Web.Migrations
 {
     [DbContext(typeof(iBDZDbContext))]
-    partial class iBDZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190827155513_3_NoStats")]
+    partial class _3_NoStats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,13 +239,9 @@ namespace iBDZ.Web.Migrations
 
                     b.Property<int?>("TrainId");
 
-                    b.Property<int?>("TrainStationId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TrainId");
-
-                    b.HasIndex("TrainStationId");
 
                     b.ToTable("TrainDelays");
                 });
@@ -527,10 +525,6 @@ namespace iBDZ.Web.Migrations
                     b.HasOne("iBDZ.Data.Train", "Train")
                         .WithMany("Delays")
                         .HasForeignKey("TrainId");
-
-                    b.HasOne("iBDZ.Data.TrainStation", "TrainStation")
-                        .WithMany()
-                        .HasForeignKey("TrainStationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

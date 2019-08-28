@@ -1,0 +1,11 @@
+﻿Type|Class|Name|HasElectricity|HasAirConditioning|HasHeating|NumSeatsPerDivision
+Open|Second|By 50 52 21-34 001-8|false|false|false|88
+Open|Second|By 50 52 21-43 034-1|false|false|false|88
+Corridor|Second|Bm 51 52 20-47 578-1|false|false|false|8
+Corridor|Second|Bm 51 52 20-47 857-9|false|false|true|8
+Corridor|Second|Bm 51 52 20-47 676-1|true|false|true|8
+Corridor|First|Am 50 52 19-47 003-0|true|true|true|6
+Corridor|First|Am 51 52 19-40 137-4|true|false|true|6
+Couchette|Second|WL 513|false|false|true|3
+Couchette|First|WLABm 51 52 60-80 582-2|true|false|true|3
+Couchette|Second|Bm 51 52 50-80 612-7|false|false|true|3

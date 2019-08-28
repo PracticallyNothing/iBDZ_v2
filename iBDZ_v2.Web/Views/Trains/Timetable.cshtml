@@ -1,0 +1,40 @@
+﻿@model IEnumerable<iBDZ.Data.BindingModels.ShortTrainInfo>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Route)</th>
+            <th>@Html.DisplayNameFor(model => model.TimeOfArrival)</th>
+            <th>@Html.DisplayNameFor(model => model.TimeOfDeparture)</th>
+            <th>@Html.DisplayNameFor(model => model.CurrOrPrevStation)</th>
+            <th>@Html.DisplayNameFor(model => model.NextStation)</th>
+            <th>@Html.DisplayNameFor(model => model.State)</th>
+            <th>@Html.DisplayNameFor(model => model.BookedPercentage)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Route)</td>
+                <td>@Html.DisplayFor(modelItem => item.TimeOfArrival)</td>
+                <td>@Html.DisplayFor(modelItem => item.TimeOfDeparture)</td>
+                <td>@Html.DisplayFor(modelItem => item.CurrOrPrevStation)</td>
+                <td>@Html.DisplayFor(modelItem => item.NextStation)</td>
+                <td>@Html.DisplayFor(modelItem => item.State)</td>
+                <td>@Html.DisplayFor(modelItem => item.BookedPercentage)</td>
+                <td>@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
+            </tr>
+        }
+    </tbody>
+</table>

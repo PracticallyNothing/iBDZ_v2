@@ -16,8 +16,8 @@ namespace iBDZ.Data
 		// Order(uint, describes where in the composition this train car sits)
 		public uint Order { get; set; }
 
-		// Seats(some kind of bitset, where every bit tells
-		//       whether the seat is taken or not (0 for free, 1 for taken))
+		// Seats (some kind of bitset, where every bit tells
+		//        whether the seat is taken or not (0 for free, 1 for taken))
 		// Note: Nobody is going to like this, but in comparison to having
 		//       40'500 entities for just 50 trains, this is better.
 		public Int64 Seats1 { get; set; }
@@ -27,7 +27,7 @@ namespace iBDZ.Data
 		///		Is the seat with this number already taken?
 		/// </summary>
 		/// <param name="seatNumber">
-		///		The seat's number as it would appear in real life 
+		///		The seat's number as it would appear in real life.
 		///		(e.g. the first seat in the first compartment is 11, not 00)
 		/// </param>
 		/// <returns>Whether the seat is taken.</returns>

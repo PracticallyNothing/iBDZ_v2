@@ -17,11 +17,10 @@ namespace iBDZ.Seeding
 			var db = (iBDZDbContext)serviceProvider.GetService(typeof(iBDZDbContext));
 
 			SeedTrainStations(db);
-			SeedRoutes(db);
-
 			await db.SaveChangesAsync();
 
-			return;
+			SeedRoutes(db);
+			await db.SaveChangesAsync();
 		}
 
 		private void SeedTrainStations(iBDZDbContext db)
@@ -37,7 +36,7 @@ namespace iBDZ.Seeding
 					{
 						Name = line["Name"],
 						Latitude = double.Parse(line["Latitude"]),
-						Longitute = double.Parse(line["Longitude"]),
+						Longitude = double.Parse(line["Longitude"]),
 					});
 				}
 			}
@@ -45,7 +44,7 @@ namespace iBDZ.Seeding
 
 		private void SeedRoutes(iBDZDbContext db)
 		{
-			CSV csv = CSV.ReadFile(@"C:\Users\User\source\repos\iBDZ_v2\iBDZ.Seeding\Data\Routes.txt", "|", true);
+			CSV csv = CSV.ReadFile(@"C:\Users\User\source\repos\iBDZ_v2\iBDZ.Seeding\Data\Routes.csv", "|", true);
 
 			List<string> routeNames = db.Routes.Select(x => x.Name).ToList();
 			foreach (var line in csv.Data)

@@ -20,101 +20,167 @@ var Camera = /** @class */ (function () {
         this.pos = new Vector2();
         this.offset = new Vector2();
         this.zoom = 1;
+        this.targetZoom = 1;
     }
     return Camera;
 }());
 var canvas = document.getElementById("map");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
-canvas.height = 1000;
-var points = [];
+canvas.height = window.innerHeight;
+window.onresize = function (evt) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    render();
+};
 var camera = new Camera();
-function getMousePosInCanvas(evt) {
+var oldTargetZoom = 1;
+var diff = 0;
+var mousePos = new Vector2();
+function updateMousePos(evt) {
     var rect = canvas.getBoundingClientRect();
-    return new Vector2(evt.clientX - rect.left, evt.clientY - rect.top);
+    var mp = new Vector2(evt.clientX, evt.clientY);
+    var canvasWindowOffset = new Vector2(rect.left, rect.top);
+    mousePos = sub(mp, canvasWindowOffset);
 }
-var pointOuterRadius = 6, pointInnerRadius = 5;
+function renderConnection(p1, p2) {
+    if (p1 == null || p2 == null || p1 == p2)
+        return;
+    var oldLineWidth = ctx.lineWidth;
+    ctx.lineWidth = pointInnerRadius;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+    ctx.lineWidth = oldLineWidth;
+}
+var pointOuterRadius = 9, pointInnerRadius = 7;
 // The point that is currently moused over.
 var hotPoint = null;
-function renderCanvas() {
-    clear();
-    for (var _i = 0, points_1 = points; _i < points_1.length; _i++) {
-        var p = points_1[_i];
-        renderPoint(p, hotPoint == p);
-    }
-}
 var originalDownPos = new Vector2();
 var lastMousePos = new Vector2();
 var mousedown = false;
 var dragStart = new Vector2();
+document.body.style.overflow = "hidden";
 canvas.onmousedown = function (evt) {
-    dragStart = getMousePosInCanvas(evt);
+    updateMousePos(evt);
+    dragStart = mousePos;
     mousedown = true;
 };
 canvas.onmouseup = function (evt) {
+    updateMousePos(evt);
     mousedown = false;
     camera.pos = add(camera.pos, camera.offset);
     camera.offset = new Vector2();
 };
+function clamp(val, min, max) {
+    return Math.min(Math.max(min, val), max);
+}
+var minZoomLevel = 1;
+var maxZoomLevel = 15;
+canvas.onwheel = function (evt) {
+    updateMousePos(evt);
+    camera.targetZoom = clamp(camera.targetZoom + (evt.deltaY > 0 ? -0.25 : 0.25), minZoomLevel, maxZoomLevel);
+    needRedraw = true;
+};
 canvas.onmouseenter = function (evt) { document.body.style.cursor = "all-scroll"; };
-canvas.onmouseleave = function (evt) { mousedown = false; document.body.style.cursor = "auto"; };
+canvas.onmouseleave = function (evt) { canvas.onmouseup(evt); document.body.style.cursor = "auto"; };
 canvas.onmousemove = function (evt) {
-    hotPoint = null;
-    var mousePos = getMousePosInCanvas(evt);
-    for (var _i = 0, points_2 = points; _i < points_2.length; _i++) {
-        var p = points_2[_i];
-        p = add(p, add(camera.pos, camera.offset));
-        var mousedOver = len(sub(p, mousePos)) <= pointOuterRadius;
-        if (!mousedOver && hotPoint == p)
-            hotPoint = null;
-        else if (mousedOver && (hotPoint == null || hotPoint == p))
-            hotPoint = p;
-    }
-    if (hotPoint != null) {
-        document.body.style.cursor = "pointer";
-    }
-    else {
-        document.body.style.cursor = "all-scroll";
-    }
+    updateMousePos(evt);
+    document.body.style.cursor = "all-scroll";
     if (mousedown) {
         camera.offset = sub(mousePos, dragStart);
     }
+    needRedraw = true;
 };
-function renderPoint(p, active) {
-    if (active === void 0) { active = false; }
-    if (!active) {
-        ctx.fillStyle = "#6666CC";
-        ctx.strokeStyle = "#8888AA";
+var Point = /** @class */ (function () {
+    function Point(name, lon, lat) {
+        this.name = name;
+        this.longitude = lon;
+        this.latitude = lat;
     }
-    else {
-        ctx.fillStyle = "#EF9A1A";
-        ctx.strokeStyle = "#EFAA43";
+    return Point;
+}());
+var Connection = /** @class */ (function () {
+    function Connection(p1, p2) {
+        this.point1 = p1;
+        this.point2 = p2;
     }
-    var p2 = add(p, add(camera.pos, camera.offset));
+    return Connection;
+}());
+var mapRenderData;
+var stations = [];
+var connections = [];
+var minLongLat = new Vector2(22.357122, 44.2125);
+var maxLongLat = new Vector2(28.609722, 41.234722);
+function init() {
+    for (var _i = 0, _a = mapRenderData.stations; _i < _a.length; _i++) {
+        var station = _a[_i];
+        stations[station.id] = new Point(station.name, station.longitude, station.latitude);
+    }
+    for (var _b = 0, _c = mapRenderData.connectingLines; _b < _c.length; _b++) {
+        var connection = _c[_b];
+        connections.push(new Connection(new Vector2(stations[connection.node1Id].longitude, stations[connection.node1Id].latitude), new Vector2(stations[connection.node2Id].longitude, stations[connection.node2Id].latitude)));
+    }
+}
+function renderAllStations() {
+    ctx.save();
+    ctx.fillStyle = "#4444CC";
+    ctx.strokeStyle = "#8888AA";
+    ctx.lineWidth = 1;
+    for (var _i = 0, _a = Object.keys(stations); _i < _a.length; _i++) {
+        var id = _a[_i];
+        renderStation(parseInt(id));
+    }
+    ctx.restore();
+}
+var zoomPointFactor = 0.5;
+function renderStation(id) {
+    var normLon = (stations[id].longitude - minLongLat.x) / (maxLongLat.x - minLongLat.x) - 0.5;
+    var normLat = (stations[id].latitude - minLongLat.y) / (maxLongLat.y - minLongLat.y) - 0.5;
     ctx.beginPath();
-    ctx.ellipse(p2.x, p2.y, // x, y
-    pointInnerRadius, pointInnerRadius, // radX, radY
-    0, // Rotation amt. (in radians)
-    0, Math.PI * 2); // startAngle, endAngle (both are in radians)
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(p2.x, p2.y, // x, y
-    pointOuterRadius, pointOuterRadius, // radX, radY
-    0, // Rotation amt. (in radians)
-    0, Math.PI * 2); // startAngle, endAngle (both are in radians)
+    ctx.arc(normLon * bg.width, normLat * bg.height, clamp(pointOuterRadius / (zoomPointFactor * camera.zoom), 0, pointOuterRadius), 0, Math.PI * 2);
     ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(normLon * bg.width, normLat * bg.height, clamp(pointInnerRadius / (zoomPointFactor * camera.zoom), 0, pointInnerRadius), 0, Math.PI * 2);
+    ctx.fill();
 }
-function clear() {
+var fontsizePixels = 5;
+function renderAllStationNames() {
+    ctx.save();
+    ctx.font = fontsizePixels + "px sans-serif";
+    ctx.fillStyle = "black";
+    for (var _i = 0, _a = Object.keys(stations); _i < _a.length; _i++) {
+        var id = _a[_i];
+        var normLon = (stations[id].longitude - minLongLat.x) / (maxLongLat.x - minLongLat.x) - 0.5;
+        var normLat = (stations[id].latitude - minLongLat.y) / (maxLongLat.y - minLongLat.y) - 0.5;
+        ctx.fillText(stations[id].name, normLon * bg.width - ctx.measureText(stations[id].name).width / 2, normLat * bg.height + 5);
+    }
+    ctx.restore();
+}
+function renderConnections() {
+}
+var needRedraw = true;
+var bg = document.getElementById("bg-map");
+function render() {
+    if (!needRedraw)
+        return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    var camPos = add(camera.pos, camera.offset);
+    ctx.translate(camPos.x, camPos.y);
+    ctx.scale(camera.zoom, camera.zoom);
+    ctx.drawImage(bg, -bg.width / 2, -bg.height / 2);
+    renderAllStations();
+    if (camera.zoom > 5)
+        renderAllStationNames();
+    renderConnections();
+    ctx.restore();
+    needRedraw = false;
 }
-points.push(new Vector2(15, 15));
-points.push(new Vector2(30.5, 30.5));
-points.push(new Vector2(67.5, 30.5));
-//let dt: number = 0;
-//let lastRenderTime: number = Date.now();
+init();
 setInterval(function () {
-    //    dt = (Date.now() - lastRenderTime) / 1000.0;
-    renderCanvas();
-    //    lastRenderTime = Date.now();
+    camera.zoom = camera.targetZoom;
+    render();
 }, 16);
 //# sourceMappingURL=MapRender.js.map

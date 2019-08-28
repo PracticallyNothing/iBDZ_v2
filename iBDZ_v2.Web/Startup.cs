@@ -13,6 +13,9 @@ using iBDZ.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using iBDZ.Services;
 using iBDZ.Seeding;
+using iBDZ.Data.BindingModels;
+using iBDZ.Web.AutoMapper;
+using iBDZ.Services.Contracts;
 
 namespace iBDZ.Web
 {
@@ -37,7 +40,15 @@ namespace iBDZ.Web
 
 			services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+			var mapperConfig = new MapperConfiguration(conf =>
+			{
+				conf.AddProfile<MappingProfile>();
+			});
+
+			services.AddSingleton(mapperConfig.CreateMapper());
 			services.AddTransient<IEmailSender, EmailSender>();
+			services.AddTransient<IMapService, MapService>();
+			services.AddTransient<ITrainsService, TrainsService>();
 
 			services.AddDbContext<iBDZDbContext>(options =>
 				options.UseSqlServer(
@@ -97,9 +108,19 @@ namespace iBDZ.Web
 				);
 			});
 
-			RouteSeeder rs = new RouteSeeder();
-			var t = rs.SeedAsync(serviceProvider);
-			t.Wait();
+			SeedDb(serviceProvider);
+		}
+
+		private static void SeedDb(IServiceProvider serviceProvider)
+		{
+			var rolesTask = new UserRolesSeeder().SeedAsync(serviceProvider);
+			rolesTask.Wait();
+
+			var routeTask = new RouteSeeder().SeedAsync(serviceProvider);
+			routeTask.Wait();
+
+			var trainDataTask = new TrainDataSeeder().SeedAsync(serviceProvider);
+			trainDataTask.Wait();
 		}
 	}
 }

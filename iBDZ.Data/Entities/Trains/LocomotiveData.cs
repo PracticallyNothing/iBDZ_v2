@@ -8,11 +8,11 @@ namespace iBDZ.Data
 	public enum LocomotiveType
 	{
 		Diesel = 1,
-		Hybrid = 2,
-		Electric = 3
+		Electric = 2,
+		Hybrid = 3,
 	}
 
-    public class LocomotiveData
+	public class LocomotiveData
     {
 		// Id (Int32)
 		public int Id { get; set; }

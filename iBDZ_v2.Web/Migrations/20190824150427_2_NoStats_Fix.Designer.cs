@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iBDZ.Db;
 
 namespace iBDZ.Web.Migrations
 {
     [DbContext(typeof(iBDZDbContext))]
-    partial class iBDZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190824150427_2_NoStats_Fix")]
+    partial class _2_NoStats_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,11 +161,13 @@ namespace iBDZ.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<TimeSpan>("Delay");
+
                     b.Property<int>("LocomotiveId");
 
                     b.Property<int>("RouteId");
 
-                    b.Property<DateTime>("TimeOfDeparture");
+                    b.Property<int>("State");
 
                     b.HasKey("Id");
 
@@ -225,27 +229,6 @@ namespace iBDZ.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TrainCarData");
-                });
-
-            modelBuilder.Entity("iBDZ.Data.TrainDelay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<TimeSpan>("Delay");
-
-                    b.Property<int?>("TrainId");
-
-                    b.Property<int?>("TrainStationId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrainId");
-
-                    b.HasIndex("TrainStationId");
-
-                    b.ToTable("TrainDelays");
                 });
 
             modelBuilder.Entity("iBDZ.Data.TrainStation", b =>
@@ -520,17 +503,6 @@ namespace iBDZ.Web.Migrations
                     b.HasOne("iBDZ.Data.Train", "Train")
                         .WithMany("Composition")
                         .HasForeignKey("TrainId");
-                });
-
-            modelBuilder.Entity("iBDZ.Data.TrainDelay", b =>
-                {
-                    b.HasOne("iBDZ.Data.Train", "Train")
-                        .WithMany("Delays")
-                        .HasForeignKey("TrainId");
-
-                    b.HasOne("iBDZ.Data.TrainStation", "TrainStation")
-                        .WithMany()
-                        .HasForeignKey("TrainStationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

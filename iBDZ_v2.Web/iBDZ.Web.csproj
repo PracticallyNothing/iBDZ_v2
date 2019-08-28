@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190827201911_1_WithStats.cs" />
+    <Compile Remove="Migrations\20190827201911_1_WithStats.Designer.cs" />
+    <Compile Remove="Migrations\20190827202313_1_WithStats_Fix.cs" />
+    <Compile Remove="Migrations\20190827202313_1_WithStats_Fix.Designer.cs" />
+    <Compile Remove="Migrations\20190828122659_1_WithStats_Fix_2.cs" />
+    <Compile Remove="Migrations\20190828122659_1_WithStats_Fix_2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Areas\TicketIssuing\Views\Home\MapRender.ts" />
   </ItemGroup>
 

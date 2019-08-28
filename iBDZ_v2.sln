@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iBDZ.Testing", "iBDZ.Testin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iBDZ.Db", "iBDZ.Db\iBDZ.Db.csproj", "{730DE8F5-50EE-4783-877D-C96E4546D87F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iBDZ.Seeding", "iBDZ.Seeding\iBDZ.Seeding.csproj", "{D63227E0-4E82-4967-A6CB-04BF06E1C7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iBDZ.Seeding", "iBDZ.Seeding\iBDZ.Seeding.csproj", "{D63227E0-4E82-4967-A6CB-04BF06E1C7A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iBDZ.Utility", "iBDZ.Utility\iBDZ.Utility.csproj", "{00AF6088-1524-45CA-8937-BD34D6642712}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iBDZ.Utility", "iBDZ.Utility\iBDZ.Utility.csproj", "{00AF6088-1524-45CA-8937-BD34D6642712}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
